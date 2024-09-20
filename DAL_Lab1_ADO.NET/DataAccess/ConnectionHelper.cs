@@ -7,7 +7,7 @@ namespace DAL_Lab1_ADO.NET.DataAccess
     public static class ConnectionHelper
     {
         private static string _machineName = Environment.MachineName;
-        private static string GetConnectionString()
+        public static string GetConnectionString()
         {
             // Allow me to use my home server for the database connection and let my colleagues use their local database
             if (_machineName == "ALEXANDRE")

@@ -8,7 +8,7 @@ namespace DAL_Lab1_ADO.NET.Models
 {
     public class User
     {
-        public int Id { get; private set; }
+        public int Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
         public string PasswordHash { get; set; }
