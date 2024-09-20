@@ -2,66 +2,68 @@
 using System.Collections.Generic;
 using DAL_Lab1_ADO.NET.Models;
 using System.Data.SqlClient;
-using DAL_Lab1_ADO.NET.DataAccess;
-
+using System.Threading.Tasks;
 
 namespace DAL_Lab1_ADO.NET.Repositories
 {
-    public class StudentRepository : IRepository<Student>
+    public class StudentRepositoryAsync : IRepositoryAsync<Student>
     {
-        private readonly string _connectionString = ConnectionHelper.GetConnectionString();
-        public void Add(Student entity)
+        private readonly string _connectionString = DataAccess.ConnectionHelper.GetConnectionString();
+
+        public async Task AddAsync(Student entity)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 SqlCommand command = new SqlCommand("INSERT INTO Students (FirstName, LastName) VALUES (@FirstName, @LastName)", connection);
                 command.Parameters.AddWithValue("@FirstName", entity.FirstName);
                 command.Parameters.AddWithValue("@LastName", entity.LastName);
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 SqlCommand command = new SqlCommand("DELETE FROM Students WHERE Id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", id);
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
 
-        public IEnumerable<Student> GetAll()
+        public async Task<IEnumerable<Student>> GetAllAsync()
         {
+            List<Student> students = new List<Student>();
+
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 SqlCommand command = new SqlCommand("SELECT * FROM Students", connection);
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
                 {
-                    Student student = new Student
+                    students.Add(new Student
                     {
                         Id = reader.GetInt32(0),
                         FirstName = reader.GetString(1),
                         LastName = reader.GetString(2)
-                    };
-                    yield return student; // yield return is used to return each element one at a time
+                    });
                 }
             }
+            return students;
         }
 
-        public Student GetById(int id)
+        public async Task<Student> GetByIdAsync(int id)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 SqlCommand command = new SqlCommand("SELECT * FROM Students WHERE Id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", id);
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.Read())
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (await reader.ReadAsync())
                 {
                     return new Student
                     {
@@ -74,16 +76,16 @@ namespace DAL_Lab1_ADO.NET.Repositories
             }
         }
 
-        public void Update(Student entity)
+        public async Task UpdateAsync(Student entity)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 SqlCommand command = new SqlCommand("UPDATE Students SET FirstName = @FirstName, LastName = @LastName WHERE Id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", entity.Id);
                 command.Parameters.AddWithValue("@FirstName", entity.FirstName);
                 command.Parameters.AddWithValue("@LastName", entity.LastName);
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
     }
