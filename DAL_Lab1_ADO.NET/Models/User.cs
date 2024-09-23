@@ -22,5 +22,13 @@ namespace DAL_Lab1_ADO.NET.Models
             PasswordHash = passwordHash;
             Role = role;
         }
+        public User(int id, string username, string email, string passwordHash, Role role) //overloaded constructor for updating user
+        {
+            Id = id;
+            Username = username;
+            Email = email;
+            PasswordHash = passwordHash;
+            Role = role;
+        }
     }
 }
