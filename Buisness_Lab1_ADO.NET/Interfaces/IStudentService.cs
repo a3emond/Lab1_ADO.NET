@@ -7,7 +7,7 @@ using DAL_Lab1_ADO.NET.Models;
 
 namespace Buisness_Lab1_ADO.NET.Interfaces
 {
-    internal interface IStudentService
+    public interface IStudentService
     {
         void AddStudent(string firstName, string lastName );
         void UpdateStudent(int id, string firstName, string lastName);

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DAL_Lab1_ADO.NET.Repositories
 {
-    internal interface IRepositoryAsync<T>
+    public interface IRepositoryAsync<T>
     {
         Task<IEnumerable<T>> GetAllAsync(); 
         Task<T> GetByIdAsync(int id); 
