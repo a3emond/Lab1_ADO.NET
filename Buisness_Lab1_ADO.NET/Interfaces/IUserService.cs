@@ -11,5 +11,10 @@ namespace Buisness_Lab1_ADO.NET.Interfaces
         void DeleteUser(int id);
         List<User> GetAllUsers();
         User GetUserById(int id);
+        bool UserExistsByUsername(string username);
+        bool UserExistsByEmail(string email);
+        bool ValidateCredentials(string usernameOrEmail, string password);
+        bool VerifyPassword(string password, string passwordHash);
+        string HashPassword(string password);
     }
 }
