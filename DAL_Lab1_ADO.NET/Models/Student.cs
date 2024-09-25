@@ -13,6 +13,11 @@ namespace DAL_Lab1_ADO.NET.Models
         public string LastName { get; set; }
 
         public Student() { }
+        public Student(string firstName, string lastName)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+        }
         public Student(int id, string firstName, string lastName)
         {
             Id = id;

@@ -11,7 +11,7 @@ namespace UI_Lab1_ADO.NET
         // The ServiceProvider is a built-in container used for Dependency Injection.
         // It will be used to manage and provide instances of services and forms
         // throughout the application's lifetime.
-        private static ServiceProvider serviceProvider;
+        public static ServiceProvider serviceProvider;
 
         [STAThread]
         static void Main()

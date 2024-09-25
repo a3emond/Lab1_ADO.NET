@@ -54,7 +54,54 @@ namespace DAL_Lab1_ADO.NET.Repositories
                 return null;
             }
         }
+        public User GetByUsername(string username)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand("SELECT * FROM Users WHERE Username = @Username", connection);
+                command.Parameters.AddWithValue("@Username", username);
+                SqlDataReader reader = command.ExecuteReader();
 
+                if (reader.Read())
+                {
+                    return new User
+                    {
+                        Id = reader.GetInt32(0),
+                        Username = reader.GetString(1),
+                        Email = reader.GetString(2),
+                        PasswordHash = reader.GetString(3),
+                        Role = (Role)reader.GetInt32(4)
+                    };
+                }
+
+                return null;
+            }
+        }
+        public User GetByEmail(string email)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand("SELECT * FROM Users WHERE Email = @Email", connection);
+                command.Parameters.AddWithValue("@Email", email);
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new User
+                    {
+                        Id = reader.GetInt32(0),
+                        Username = reader.GetString(1),
+                        Email = reader.GetString(2),
+                        PasswordHash = reader.GetString(3),
+                        Role = (Role)reader.GetInt32(4)
+                    };
+                }
+
+                return null;
+            }
+        }
         public void Add(User entity)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
