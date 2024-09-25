@@ -1,5 +1,7 @@
-﻿using Buisness_Lab1_ADO.NET.Localization;
+﻿using Buisness_Lab1_ADO.NET.Interfaces;
+using Buisness_Lab1_ADO.NET.Localization;
 using Buisness_Lab1_ADO.NET.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows.Forms;
 
@@ -7,8 +9,10 @@ namespace UI_Lab1_ADO.NET.Forms
 {
     public partial class LoginForm : Form
     {
-        public LoginForm()
+        private IUserService _userService;
+        public LoginForm(IUserService userService)
         {
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             InitializeComponent();
         }
 
@@ -32,16 +36,15 @@ namespace UI_Lab1_ADO.NET.Forms
         {
             string username = txtUsername.Text;
             string password = txtPassword.Text;
-            UserService userService = new UserService();
 
             //check if the user exists
             if (username.Contains("@"))
             {
-                LoginByEmail(username, password, userService);
+                LoginByEmail(username, password, _userService);
             }
             else
             {
-                LoginByUsername(username, password, userService);
+                LoginByUsername(username, password, _userService);
             }
         }
         private void btnRegister_Click(object sender, EventArgs e)
@@ -49,7 +52,7 @@ namespace UI_Lab1_ADO.NET.Forms
             //hide the login form
             this.Hide();
             //show the register form
-            RegisterForm registerForm = new RegisterForm();
+            var registerForm = Program.serviceProvider.GetRequiredService<RegisterForm>();
             registerForm.Show();
             return;
         }
@@ -57,7 +60,7 @@ namespace UI_Lab1_ADO.NET.Forms
         //
         // Utility methods
         //
-        private void LoginByUsername(string username, string password, UserService userService)
+        private void LoginByUsername(string username, string password, IUserService userService)
         {
             //check if the user exists by username
             if (userService.UserExistsByUsername(username))
@@ -80,7 +83,7 @@ namespace UI_Lab1_ADO.NET.Forms
                 return;
             }
         }
-        private void LoginByEmail(string email, string password, UserService userService)
+        private void LoginByEmail(string email, string password, IUserService userService)
         {
             //check if the user exists by email
             if (userService.UserExistsByEmail(email))
@@ -109,7 +112,7 @@ namespace UI_Lab1_ADO.NET.Forms
             //hide the login form
             this.Hide();
             //show the main form
-            MainForm mainForm = new MainForm();
+            var mainForm = Program.serviceProvider.GetRequiredService<MainForm>();
             mainForm.Show();
             
         }
