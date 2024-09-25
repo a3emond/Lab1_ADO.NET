@@ -4,12 +4,12 @@ using System.Linq;
 using Buisness_Lab1_ADO.NET.Interfaces;
 using DAL_Lab1_ADO.NET.Models;
 using DAL_Lab1_ADO.NET.Repositories;
-using BCrypt.Net;
 
 namespace Buisness_Lab1_ADO.NET.Services
 {
     public class UserService : IUserService
     {
+        public UserService() { }
         //trying to learn how to use interfaces to separate concerns between the business and data access layers
 
         // use interface instead of concrete class to separate concerns

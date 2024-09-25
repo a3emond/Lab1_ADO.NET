@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Buisness_Lab1_ADO.NET.Localization;
+using Buisness_Lab1_ADO.NET.Services;
+using System;
 using System.Windows.Forms;
 
 namespace UI_Lab1_ADO.NET.Forms
@@ -16,7 +11,7 @@ namespace UI_Lab1_ADO.NET.Forms
         {
             InitializeComponent();
         }
-        
+
         private void textBoxFocusSelect(object sender, EventArgs e)
         {
             //textbox select all on active (EnterEvent)
@@ -35,7 +30,92 @@ namespace UI_Lab1_ADO.NET.Forms
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
+            string username = txtUsername.Text;
+            string password = txtPassword.Text;
+            UserService userService = new UserService();
+
+            //check if the user exists
+            if (username.Contains("@"))
+            {
+                LoginByEmail(username, password, userService);
+            }
+            else
+            {
+                LoginByUsername(username, password, userService);
+            }
+        }
+        private void btnRegister_Click(object sender, EventArgs e)
+        {
+            //hide the login form
+            this.Hide();
+            //show the register form
+            RegisterForm registerForm = new RegisterForm();
+            registerForm.Show();
+            return;
+        }
+
+        //
+        // Utility methods
+        //
+        private void LoginByUsername(string username, string password, UserService userService)
+        {
+            //check if the user exists by username
+            if (userService.UserExistsByUsername(username))
+            {
+                //validate Credentials
+                if (userService.ValidateCredentials(username, password))
+                {
+                    LoginSuccess();
+                }
+                else
+                {
+                    MessageBox.Show(LocalizationStrings.PasswordIncorrect);
+                    //TODO: Implement password recovery
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show(LocalizationStrings.UserDoesNotExist);
+                return;
+            }
+        }
+        private void LoginByEmail(string email, string password, UserService userService)
+        {
+            //check if the user exists by email
+            if (userService.UserExistsByEmail(email))
+            {
+                //validate Credentials
+                if (userService.ValidateCredentials(email, password))
+                {
+                    LoginSuccess();
+                }
+                else
+                {
+                    MessageBox.Show(LocalizationStrings.PasswordIncorrect);
+                    //TODO: Implement password recovery
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show(LocalizationStrings.PasswordIncorrect);
+                return;
+            }
+        }
+        private void LoginSuccess()
+        {
+            MessageBox.Show(LocalizationStrings.LoginSuccess);
+            //hide the login form
+            this.Hide();
+            //show the main form
+            MainForm mainForm = new MainForm();
+            mainForm.Show();
             
         }
+
+
+        //TODO: Implement Role based redirection
     }
 }
+            
